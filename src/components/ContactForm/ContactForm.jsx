@@ -1,24 +1,24 @@
-import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contactsOps";
-import { Formik, Form, Field } from "formik";
-import { useId } from "react";
-import * as Yup from "yup";
-import { ErrorMessage } from "formik";
-import css from "./ContactForm.module.css";
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contacts/operations';
+import { Formik, Form, Field } from 'formik';
+import { useId } from 'react';
+import * as Yup from 'yup';
+import { ErrorMessage } from 'formik';
+import css from './ContactForm.module.css';
 
 const FeedbackSchema = Yup.object().shape({
   name: Yup.string()
-    .min(3, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
   number: Yup.string()
-    .matches(/^\d{3}-\d{2}-\d{2}$/, "Must be XXX-XX-XX")
-    .required("Required"),
+    .matches(/^\d{3}-\d{2}-\d{2}$/, 'Must be XXX-XX-XX')
+    .required('Required'),
 });
 
 const initialValues = {
-  name: "",
-  number: "",
+  name: '',
+  number: '',
 };
 export default function ContactForm() {
   const dispatch = useDispatch();
