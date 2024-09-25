@@ -5,7 +5,7 @@ import { register } from '../../redux/auth/operations';
 export default function RegistrationForm() {
   const dispatch = useDispatch();
   function handleSubmit(values, actions) {
-    if (values.username === '' || values.email === '' || values.password === '')
+    if (values.name === '' || values.email === '' || values.password === '')
       return;
     dispatch(register(values));
     actions.resetForm();
@@ -13,12 +13,12 @@ export default function RegistrationForm() {
   return (
     <>
       <Formik
-        initialValues={{ username: '', email: '', password: '' }}
+        initialValues={{ name: '', email: '', password: '' }}
         onSubmit={handleSubmit}
       >
         <Form>
           <label>
-            Name <Field type="text" name="username"></Field>
+            Name <Field type="text" name="name"></Field>
           </label>
           <label>
             Email <Field type="email" name="email"></Field>
