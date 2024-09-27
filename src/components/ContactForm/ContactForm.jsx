@@ -1,32 +1,38 @@
-import { useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contacts/operations';
-import { Formik, Form, Field } from 'formik';
-import { useId } from 'react';
-import * as Yup from 'yup';
-import { ErrorMessage } from 'formik';
-import css from './ContactForm.module.css';
+import { useDispatch } from "react-redux";
+import { Formik, Form, Field } from "formik";
+import { useId } from "react";
+import * as Yup from "yup";
+import { ErrorMessage } from "formik";
+import css from "./ContactForm.module.css";
+import { setModal } from "../../redux/modal/slice";
+import { editContact } from "../../redux/contacts/operations";
 
 const FeedbackSchema = Yup.object().shape({
   name: Yup.string()
-    .min(3, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+    .min(3, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
   number: Yup.string()
-    .matches(/^\d{3}-\d{2}-\d{2}$/, 'Must be XXX-XX-XX')
-    .required('Required'),
+    .matches(/^\d{3}-\d{2}-\d{2}$/, "Must be XXX-XX-XX")
+    .required("Required"),
 });
 
-const initialValues = {
-  name: '',
-  number: '',
-};
-export default function ContactForm() {
+export default function ContactForm({ btnName, sendContact, contact }) {
+  const contactName = contact.name ?? "";
+  const contactNumber = contact.number ?? "";
+  const initialValues = {
+    name: contactName,
+    number: contactNumber,
+  };
   const dispatch = useDispatch();
   const nameFieldId = useId();
   const numberFieldId = useId();
 
   const handleSubmit = (values, actions) => {
-    dispatch(addContact(values));
+    console.log(values);
+    dispatch(sendContact(values));
+    dispatch(editContact(values, contact.id));
+    dispatch(setModal(false));
     actions.resetForm();
   };
 
@@ -62,7 +68,7 @@ export default function ContactForm() {
           <ErrorMessage className={css.error} name="number" component="span" />
         </div>
         <button className={css.button} type="submit">
-          Add contact
+          {btnName}
         </button>
       </Form>
     </Formik>
