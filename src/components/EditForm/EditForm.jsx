@@ -30,7 +30,6 @@ export default function EditForm() {
   const numberFieldId = useId();
 
   const handleSubmit = (values, actions) => {
-    dispatch(editContact(values));
     dispatch(editContact({ ...values, id: contact.id }));
     dispatch(setModal(false));
     toast(`The contact has been updated`, {
