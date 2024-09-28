@@ -5,8 +5,12 @@ import SearchBox from "../components/SearchBox/SearchBox";
 import { useEffect } from "react";
 import { selectError, selectIsLoading } from "../redux/contacts/selectors";
 import { addContact, fetchContacts } from "../redux/contacts/operations";
-import { selectModalIsOpen } from "../redux/modal/selectors";
+import {
+  selectDelModalIsOpen,
+  selectModalIsOpen,
+} from "../redux/modal/selectors";
 import EditModal from "../components/EditModal/EditModal";
+import DelModal from "../components/DelModal/DelModal";
 
 export default function ContactsPage() {
   const dispatch = useDispatch();
@@ -24,12 +28,14 @@ export default function ContactsPage() {
         btnName="Add contact"
         sendContact={addContact}
         contact={{ name: "", number: "" }}
+        notification="added"
       />
       <SearchBox />
       {loading && !error && <p>Loading contacts...</p>}
       {error && <p>Error! Try again later</p>}
       <ContactList />
       {modalIsOpen && <EditModal />}
+      {selectDelModalIsOpen && <DelModal />}
     </>
   );
 }

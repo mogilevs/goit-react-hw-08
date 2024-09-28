@@ -5,7 +5,8 @@ import { selectModalIsOpen } from "../../redux/modal/selectors";
 import { editContact } from "../../redux/contacts/operations";
 import { setModal } from "../../redux/modal/slice";
 import { selectCurrentContact } from "../../redux/contacts/selectors";
-
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import css from "./EditModal.module.css";
 const customStyles = {
   content: {
     top: "50%",
@@ -34,13 +35,20 @@ export default function EditModal() {
         onRequestClose={closeModal}
         style={customStyles}
       >
-        <button onClick={closeModal}>Close</button>
+        <button
+          onClick={closeModal}
+          aria-label="close"
+          className={css.closeBtn}
+        >
+          <IoMdCloseCircleOutline />
+        </button>
         <h2>Edit contact</h2>
 
         <ContactForm
           btnName="Save"
           sendContact={editContact}
           contact={contact}
+          notification="updated"
         />
       </Modal>
     </div>

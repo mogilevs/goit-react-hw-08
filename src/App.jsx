@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsRefreshing } from "./redux/auth/selectors";
 import { refreshUser } from "./redux/auth/operations";
+import { Toaster } from "react-hot-toast";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
@@ -60,6 +61,9 @@ export default function App() {
           </Routes>
         </Suspense>
       </Layout>
+      <div>
+        <Toaster />
+      </div>
     </div>
   );
 }

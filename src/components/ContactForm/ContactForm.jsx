@@ -6,6 +6,7 @@ import { ErrorMessage } from "formik";
 import css from "./ContactForm.module.css";
 import { setModal } from "../../redux/modal/slice";
 import { editContact } from "../../redux/contacts/operations";
+import toast from "react-hot-toast";
 
 const FeedbackSchema = Yup.object().shape({
   name: Yup.string()
@@ -17,7 +18,12 @@ const FeedbackSchema = Yup.object().shape({
     .required("Required"),
 });
 
-export default function ContactForm({ btnName, sendContact, contact }) {
+export default function ContactForm({
+  btnName,
+  sendContact,
+  contact,
+  notification,
+}) {
   const contactName = contact.name ?? "";
   const contactNumber = contact.number ?? "";
   const initialValues = {
@@ -29,10 +35,19 @@ export default function ContactForm({ btnName, sendContact, contact }) {
   const numberFieldId = useId();
 
   const handleSubmit = (values, actions) => {
-    console.log(values);
     dispatch(sendContact(values));
-    dispatch(editContact(values, contact.id));
+    if (btnName === "Save") {
+      dispatch(editContact({ ...values, id: contact.id }));
+    }
     dispatch(setModal(false));
+    toast(`The contact is ${notification}`, {
+      duration: 4000,
+      position: "top-center",
+      style: {
+        background: "green",
+        color: "white",
+      },
+    });
     actions.resetForm();
   };
 
