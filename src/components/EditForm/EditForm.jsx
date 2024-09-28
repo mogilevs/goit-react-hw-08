@@ -1,11 +1,13 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import { useId } from "react";
 import * as Yup from "yup";
 import { ErrorMessage } from "formik";
-import css from "./ContactForm.module.css";
-import { addContact } from "../../redux/contacts/operations";
+import css from "./EditForm.module.css";
+import { setModal } from "../../redux/modal/slice";
+import { editContact } from "../../redux/contacts/operations";
 import toast from "react-hot-toast";
+import { selectCurrentContact } from "../../redux/contacts/selectors";
 
 const FeedbackSchema = Yup.object().shape({
   name: Yup.string()
@@ -17,18 +19,21 @@ const FeedbackSchema = Yup.object().shape({
     .required("Required"),
 });
 
-export default function ContactForm() {
+export default function EditForm() {
+  const contact = useSelector(selectCurrentContact);
   const initialValues = {
-    name: "",
-    number: "",
+    name: contact.name,
+    number: contact.number,
   };
   const dispatch = useDispatch();
   const nameFieldId = useId();
   const numberFieldId = useId();
 
   const handleSubmit = (values, actions) => {
-    dispatch(addContact(values));
-    toast(`The contact has been added`, {
+    dispatch(editContact(values));
+    dispatch(editContact({ ...values, id: contact.id }));
+    dispatch(setModal(false));
+    toast(`The contact has been updated`, {
       duration: 4000,
       position: "top-center",
       style: {
@@ -71,7 +76,7 @@ export default function ContactForm() {
           <ErrorMessage className={css.error} name="number" component="span" />
         </div>
         <button className={css.button} type="submit">
-          Add contact
+          Save
         </button>
       </Form>
     </Formik>

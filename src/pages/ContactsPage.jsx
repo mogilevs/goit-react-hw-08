@@ -4,7 +4,7 @@ import ContactList from "../components/ContactList/ContactList";
 import SearchBox from "../components/SearchBox/SearchBox";
 import { useEffect } from "react";
 import { selectError, selectIsLoading } from "../redux/contacts/selectors";
-import { addContact, fetchContacts } from "../redux/contacts/operations";
+import { fetchContacts } from "../redux/contacts/operations";
 import {
   selectDelModalIsOpen,
   selectModalIsOpen,
@@ -17,6 +17,7 @@ export default function ContactsPage() {
   const loading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
   const modalIsOpen = useSelector(selectModalIsOpen);
+  const delModalIsOpen = useSelector(selectDelModalIsOpen);
 
   useEffect(() => {
     dispatch(fetchContacts());
@@ -24,18 +25,13 @@ export default function ContactsPage() {
 
   return (
     <>
-      <ContactForm
-        btnName="Add contact"
-        sendContact={addContact}
-        contact={{ name: "", number: "" }}
-        notification="added"
-      />
+      <ContactForm />
       <SearchBox />
       {loading && !error && <p>Loading contacts...</p>}
       {error && <p>Error! Try again later</p>}
       <ContactList />
       {modalIsOpen && <EditModal />}
-      {selectDelModalIsOpen && <DelModal />}
+      {delModalIsOpen && <DelModal />}
     </>
   );
 }
