@@ -7,6 +7,7 @@ import {
 } from "./operations";
 import { selectContacts } from "./selectors";
 import { selectFilter } from "../filters/selectors";
+import { logout } from "../auth/operations";
 
 const handlePending = (state) => {
   state.isLoading = true;
@@ -65,20 +66,15 @@ const contactsSlice = createSlice({
         );
         state.currentContact = null;
       })
-      .addCase(editContact.rejected, handleRejected);
+      .addCase(editContact.rejected, handleRejected)
+      .addCase(logout.fulfilled, (state) => {
+        state.items = [];
+        state.isLoading = false;
+        state.error = null;
+      });
   },
 });
 
 export const contactsReducer = contactsSlice.reducer;
 
 export const { changeCurrentContact } = contactsSlice.actions;
-
-export const selectFilteredContacts = createSelector(
-  [selectContacts, selectFilter],
-  (contacts, filter) =>
-    contacts.filter(
-      (contact) =>
-        contact.name.toLowerCase().includes(filter.toLowerCase()) ||
-        contact.number.includes(filter)
-    )
-);
